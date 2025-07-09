@@ -1,0 +1,994 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="36.00" TargetName="SINGLE_AOI_CLEARLINK" TargetType="Routine" TargetSubType="RLL" TargetClass="Standard" ContainsContext="true" ExportDate="Wed Jul 09 10:46:31 2025" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Context" Name="Logistiq_Sorter">
+<DataTypes Use="Context">
+<DataType Name="UDT_CL_MOTOR" Family="NoFamily" Class="User">
+<Members>
+<Member Name="CURRENT_STATE" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="ZZZZZZZZZZUDT_CL_MOT1" DataType="SINT" Dimension="0" Radix="Decimal" Hidden="true" ExternalAccess="Read/Write"/>
+<Member Name="Negative_Jog_Button_Pressed" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT1" BitNumber="0" ExternalAccess="Read/Write"/>
+<Member Name="Positive_Jog_Button_Pressed" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT1" BitNumber="1" ExternalAccess="Read/Write"/>
+<Member Name="Move_Acceleration" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="Move_Velocity_Positive_FPM" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="Move_Velocity_Negative_FPM" DataType="DINT" Dimension="0" Radix="Decimal" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="ZZZZZZZZZZUDT_CL_MOT7" DataType="SINT" Dimension="0" Radix="Decimal" Hidden="true" ExternalAccess="Read/Write"/>
+<Member Name="Reset" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT7" BitNumber="0" ExternalAccess="Read/Write"/>
+<Member Name="Begin_Homing" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT7" BitNumber="1" ExternalAccess="Read/Write"/>
+<Member Name="ACCUMULATED_SHUTDOWN_HISTORY" DataType="DINT" Dimension="0" Radix="Binary" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="CURRENT_MOTOR_STATUS" DataType="DINT" Dimension="0" Radix="Binary" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="ZZZZZZZZZZUDT_CL_MOT12" DataType="SINT" Dimension="0" Radix="Decimal" Hidden="true" ExternalAccess="Read/Write"/>
+<Member Name="Motor_Stopped" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="0" ExternalAccess="Read/Write"/>
+<Member Name="Motor_Moving_At_Target_Velocity" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="1" ExternalAccess="Read/Write"/>
+<Member Name="Forward_command" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="2" ExternalAccess="Read/Write"/>
+<Member Name="Reverse_command" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="3" ExternalAccess="Read/Write"/>
+<Member Name="STATUS_FAULT" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="4" ExternalAccess="Read/Write"/>
+<Member Name="DIR" DataType="BIT" Dimension="0" Radix="Decimal" Hidden="false" Target="ZZZZZZZZZZUDT_CL_MOT12" BitNumber="5" ExternalAccess="Read/Write"/>
+<Member Name="SCALE_FPM_RPM" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="Target_Vel_RPM" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="Target_Vel_FPM" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write"/>
+<Member Name="Torq_feedback" DataType="REAL" Dimension="0" Radix="Float" Hidden="false" ExternalAccess="Read/Write"/>
+</Members>
+</DataType>
+</DataTypes>
+<Modules Use="Context">
+<Module Use="Reference" Name="ClearLink1">
+</Module>
+</Modules>
+<AddOnInstructionDefinitions Use="Context">
+<AddOnInstructionDefinition Name="AOI_CLEARLINK_DRIVE" Class="Standard" Revision="1.0" RevisionExtension="12182024" Vendor="LogistiQ" ExecutePrescan="false" ExecutePostscan="false" ExecuteEnableInFalse="false" CreatedDate="2024-12-18T22:36:11.953Z" CreatedBy="DESKTOP-SE2P1UG\JRrnd" EditedDate="2025-01-14T21:39:56.099Z"
+ EditedBy="HSL2\HSL2" SoftwareRevision="v36.00">
+<RevisionNote>
+<![CDATA[CREATED:12/18/2024 BY JR]]>
+</RevisionNote>
+<Parameters>
+<Parameter Name="EnableIn" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Enable Input - System Defined Parameter]]>
+</Description>
+</Parameter>
+<Parameter Name="EnableOut" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="false" ExternalAccess="Read Only">
+<Description>
+<![CDATA[Enable Output - System Defined Parameter]]>
+</Description>
+</Parameter>
+<Parameter Name="INP_CLDRIVE_O1" TagType="Base" DataType="_01A8:002B_0001_E6449ADC:O:0" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="INP_CLDRIVE_I1" TagType="Base" DataType="_01A8:002B_0001_83E544F3:I:0" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="DRV00" TagType="Base" DataType="UDT_CL_MOTOR" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="DRV01" TagType="Base" DataType="UDT_CL_MOTOR" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="DRV02" TagType="Base" DataType="UDT_CL_MOTOR" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="DRV03" TagType="Base" DataType="UDT_CL_MOTOR" Usage="InOut" Required="true" Visible="true" Constant="false"/>
+<Parameter Name="ENABLE_DRV_0" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="ENABLE_DRV_1" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="ENABLE_DRV_2" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="ENABLE_DRV_3" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="FAULT_DRV_0" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="STAUS_DRV_0_ENABLED" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="STAUS_DRV_1_ENABLED" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="FAULT_DRV_1" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="STAUS_DRV_2_ENABLED" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="FAULT_DRV_2" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="STAUS_DRV_3_ENABLED" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="FAULT_DRV_3" TagType="Base" DataType="BOOL" Usage="Output" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read Only">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="ENABLE_ALL" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+<Parameter Name="START_ALL" TagType="Base" DataType="BOOL" Usage="Input" Radix="Decimal" Required="false" Visible="true" ExternalAccess="Read/Write">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="BOOL" Radix="Decimal" Value="0"/>
+</DefaultData>
+</Parameter>
+</Parameters>
+<LocalTags>
+<LocalTag Name="STATE_ENABLING" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_MOTOR_SHUTDOWN" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[7]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="7"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_STARTING_STOP_MOVE" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[6]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="6"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_STOPPED" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[1]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="1"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_STARTING_POSITIVE_MOVE" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[2]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="2"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_STARTING_NEGATIVE_MOVE" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[3]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="3"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_MOVING_POSITIVE" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[4]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="4"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_MOVING_NEGATIVE" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[5]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="5"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="STATE_CLEARLINK_SHUTDOWN" DataType="DINT" Radix="Decimal" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[8]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="DINT" Radix="Decimal" Value="8"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="TON_ERROR_0" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,500,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Positive_raw_0" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Negative_raw_0" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="TON_ERROR_1" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,500,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Negative_raw_1" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Positive_raw_1" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="TON_ERROR_2" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,500,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Positive_raw_2" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Negative_raw_2" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="TON_ERROR_3" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,500,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Positive_raw_3" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="Move_Velocity_Negative_raw_3" DataType="REAL" Radix="Float" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[0.00000000e+000]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<DataValue DataType="REAL" Radix="Float" Value="0.0"/>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="SOFT_START_TIMER_0" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,2000,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="2000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="SOFT_START_TIMER_1" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,5000,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="5000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="SOFT_START_TIMER_2" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,5000,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="5000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+<LocalTag Name="SOFT_START_TIMER_3" DataType="TIMER" ExternalAccess="None">
+<DefaultData Format="L5K">
+<![CDATA[[0,5000,0]]]>
+</DefaultData>
+<DefaultData Format="Decorated">
+<Structure DataType="TIMER">
+<DataValueMember Name="PRE" DataType="DINT" Radix="Decimal" Value="5000"/>
+<DataValueMember Name="ACC" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="EN" DataType="BOOL" Value="0"/>
+<DataValueMember Name="TT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DN" DataType="BOOL" Value="0"/>
+</Structure>
+</DefaultData>
+</LocalTag>
+</LocalTags>
+<Routines>
+<Routine Name="Logic" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[EQ(DRV00.SCALE_FPM_RPM,0)MOVE(1,DRV00.SCALE_FPM_RPM);]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[EQ(DRV01.SCALE_FPM_RPM,0)MOVE(1,DRV01.SCALE_FPM_RPM);]]>
+</Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text>
+<![CDATA[EQ(DRV01.SCALE_FPM_RPM,0)MOVE(1,DRV02.SCALE_FPM_RPM);]]>
+</Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text>
+<![CDATA[EQ(DRV01.SCALE_FPM_RPM,0)MOVE(1,DRV03.SCALE_FPM_RPM);]]>
+</Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment>
+<![CDATA[-------------------------------------DRIVE 0-----------------------------------------]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text>
+<![CDATA[[XIC(ENABLE_DRV_0) ,XIC(ENABLE_ALL) ]OTE(INP_CLDRIVE_O1.Motor0_Out_Reg_Enable);]]>
+</Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text>
+<![CDATA[MOVE(INP_CLDRIVE_I1.Motor0_Status_Reg,DRV00.CURRENT_STATE);]]>
+</Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text>
+<![CDATA[XIC(INP_CLDRIVE_O1.Motor0_Out_Reg_Enable)OTE(STAUS_DRV_0_ENABLED);]]>
+</Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV00.Forward_command) ,XIC(START_ALL) XIO(DRV00.DIR) ]OTE(DRV00.Positive_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV00.Reverse_command) ,XIC(START_ALL) XIC(DRV00.DIR) ]OTE(DRV00.Negative_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Text>
+<![CDATA[XIO(DRV00.Reset)XIC(INP_CLDRIVE_O1.Motor0_Out_Reg_Enable)XIO(INP_CLDRIVE_I1.Motor0_Status_Reg_HLFB_ON)MOVE(2000,TON_ERROR_0.PRE)TON(TON_ERROR_0,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text>
+<![CDATA[XIC(TON_ERROR_0.DN)[OTE(DRV00.STATUS_FAULT) ,OTE(FAULT_DRV_0) ];]]>
+</Text>
+</Rung>
+<Rung Number="12" Type="N">
+<Text>
+<![CDATA[XIC(STAUS_DRV_0_ENABLED)[XIC(DRV00.Positive_Jog_Button_Pressed) ,XIC(DRV00.Negative_Jog_Button_Pressed) ]MOVE(2000,SOFT_START_TIMER_0.PRE)TON(SOFT_START_TIMER_0,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="13" Type="N">
+<Comment>
+<![CDATA[TORQ]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_0.DN) MOVE(DRV00.Move_Acceleration,INP_CLDRIVE_O1.Motor0_A_PWM) ,XIO(SOFT_START_TIMER_0.DN) MOVE(500,INP_CLDRIVE_O1.Motor0_A_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="14" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM
+
+Move_Velocity_Positive_FPM*((6.438264))+2500]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_0.DN) [LT(DRV00.Move_Velocity_Positive_FPM,360) ,GE(DRV00.Move_Velocity_Positive_FPM,360) MOVE(360,DRV00.Move_Velocity_Positive_FPM) ] CPT(Move_Velocity_Positive_raw_0,DRV00.Move_Velocity_Positive_FPM*((6.438264))+2500) ,XIO(SOFT_START_TIMER_0.DN) CPT(Move_Velocity_Positive_raw_0,100*((6.438264))+2500) ];]]>
+</Text>
+</Rung>
+<Rung Number="15" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_0.DN) CPT(Move_Velocity_Negative_raw_0,DRV00.Move_Velocity_Negative_FPM*(-6.5935+0.197805)+2500.748) ,XIO(SOFT_START_TIMER_0.DN) CPT(Move_Velocity_Negative_raw_0,100*(-6.5935+0.197805)+2500.748) ];]]>
+</Text>
+</Rung>
+<Rung Number="16" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[XIC(DRV00.Positive_Jog_Button_Pressed)XIO(DRV00.Negative_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor0_Status_Reg_HLFB_ON)[LT(Move_Velocity_Positive_raw_0,2500) MOVE(2500,INP_CLDRIVE_O1.Motor0_B_PWM) ,GE(Move_Velocity_Positive_raw_0,2500) LT(Move_Velocity_Positive_raw_0,4990) MOVE(Move_Velocity_Positive_raw_0,INP_CLDRIVE_O1.Motor0_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="17" Type="N">
+<Text>
+<![CDATA[XIC(DRV00.Negative_Jog_Button_Pressed)XIO(DRV00.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor0_Status_Reg_HLFB_ON)[LT(Move_Velocity_Negative_raw_0,15) MOVE(15,INP_CLDRIVE_O1.Motor0_B_PWM) ,GE(Move_Velocity_Negative_raw_0,15) LT(Move_Velocity_Negative_raw_0,2499) MOVE(Move_Velocity_Negative_raw_0,INP_CLDRIVE_O1.Motor0_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="18" Type="N">
+<Text>
+<![CDATA[XIO(DRV00.Negative_Jog_Button_Pressed)XIO(DRV00.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor0_Status_Reg_HLFB_ON)MOVE(2500,INP_CLDRIVE_O1.Motor0_B_PWM);]]>
+</Text>
+</Rung>
+<Rung Number="19" Type="N">
+<Comment>
+<![CDATA[-------------------------------------DRIVE 1-----------------------------------------]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="20" Type="N">
+<Text>
+<![CDATA[[XIC(ENABLE_DRV_1) ,XIC(ENABLE_ALL) ]XIC(SOFT_START_TIMER_0.DN)OTE(INP_CLDRIVE_O1.Motor1_Out_Reg_Enable);]]>
+</Text>
+</Rung>
+<Rung Number="21" Type="N">
+<Text>
+<![CDATA[MOVE(INP_CLDRIVE_I1.Motor1_Status_Reg,DRV01.CURRENT_STATE);]]>
+</Text>
+</Rung>
+<Rung Number="22" Type="N">
+<Text>
+<![CDATA[XIC(INP_CLDRIVE_O1.Motor1_Out_Reg_Enable)OTE(STAUS_DRV_1_ENABLED);]]>
+</Text>
+</Rung>
+<Rung Number="23" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV01.Forward_command) ,XIC(START_ALL) XIO(DRV01.DIR) ]XIC(SOFT_START_TIMER_0.DN)OTE(DRV01.Positive_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="24" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV01.Reverse_command) ,XIC(START_ALL) XIC(DRV01.DIR) ]XIC(SOFT_START_TIMER_0.DN)OTE(DRV01.Negative_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="25" Type="N">
+<Text>
+<![CDATA[XIO(DRV01.Reset)XIC(INP_CLDRIVE_O1.Motor1_Out_Reg_Enable)XIO(INP_CLDRIVE_I1.Motor1_Status_Reg_HLFB_ON)MOVE(2000,TON_ERROR_1.PRE)TON(TON_ERROR_1,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="26" Type="N">
+<Text>
+<![CDATA[XIC(TON_ERROR_1.DN)[OTE(DRV01.STATUS_FAULT) ,OTE(FAULT_DRV_1) ];]]>
+</Text>
+</Rung>
+<Rung Number="27" Type="N">
+<Text>
+<![CDATA[XIC(STAUS_DRV_1_ENABLED)[XIC(DRV01.Positive_Jog_Button_Pressed) ,XIC(DRV01.Negative_Jog_Button_Pressed) ]MOVE(2000,SOFT_START_TIMER_1.PRE)TON(SOFT_START_TIMER_1,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="28" Type="N">
+<Comment>
+<![CDATA[TORQ]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_1.DN) MOVE(DRV01.Move_Acceleration,INP_CLDRIVE_O1.Motor1_A_PWM) ,XIO(SOFT_START_TIMER_1.DN) MOVE(500,INP_CLDRIVE_O1.Motor1_A_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="29" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_1.DN) [LT(DRV01.Move_Velocity_Positive_FPM,360) ,GE(DRV01.Move_Velocity_Positive_FPM,360) MOVE(360,DRV01.Move_Velocity_Positive_FPM) ] CPT(Move_Velocity_Positive_raw_1,DRV01.Move_Velocity_Positive_FPM*((6.438264))+2500) ,XIO(SOFT_START_TIMER_1.DN) CPT(Move_Velocity_Positive_raw_1,100*((6.438264))+2500) ];]]>
+</Text>
+</Rung>
+<Rung Number="30" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_1.DN) CPT(Move_Velocity_Negative_raw_1,DRV01.Move_Velocity_Negative_FPM*(-6.5935+0.197805)+2500.748) ,XIO(SOFT_START_TIMER_1.DN) CPT(Move_Velocity_Negative_raw_1,100*(-6.5935+0.197805)+2500.748) ];]]>
+</Text>
+</Rung>
+<Rung Number="31" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[XIC(DRV01.Positive_Jog_Button_Pressed)XIO(DRV01.Negative_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor1_Status_Reg_HLFB_ON)[LT(Move_Velocity_Positive_raw_1,2500) MOVE(2500,INP_CLDRIVE_O1.Motor1_B_PWM) ,GE(Move_Velocity_Positive_raw_1,2500) LT(Move_Velocity_Positive_raw_1,4990) MOVE(Move_Velocity_Positive_raw_1,INP_CLDRIVE_O1.Motor1_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="32" Type="N">
+<Text>
+<![CDATA[XIC(DRV01.Negative_Jog_Button_Pressed)XIO(DRV01.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor1_Status_Reg_HLFB_ON)[LT(Move_Velocity_Negative_raw_1,15) MOVE(15,INP_CLDRIVE_O1.Motor1_B_PWM) ,GE(Move_Velocity_Negative_raw_1,15) LT(Move_Velocity_Negative_raw_1,2499) MOVE(Move_Velocity_Negative_raw_1,INP_CLDRIVE_O1.Motor1_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="33" Type="N">
+<Text>
+<![CDATA[XIO(DRV01.Negative_Jog_Button_Pressed)XIO(DRV01.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor1_Status_Reg_HLFB_ON)MOVE(2500,INP_CLDRIVE_O1.Motor1_B_PWM);]]>
+</Text>
+</Rung>
+<Rung Number="34" Type="N">
+<Comment>
+<![CDATA[-------------------------------------DRIVE 2-----------------------------------------]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="35" Type="N">
+<Text>
+<![CDATA[[XIC(ENABLE_DRV_2) ,XIC(ENABLE_ALL) ]XIC(SOFT_START_TIMER_1.DN)OTE(INP_CLDRIVE_O1.Motor2_Out_Reg_Enable);]]>
+</Text>
+</Rung>
+<Rung Number="36" Type="N">
+<Text>
+<![CDATA[MOVE(INP_CLDRIVE_I1.Motor2_Status_Reg,DRV02.CURRENT_STATE);]]>
+</Text>
+</Rung>
+<Rung Number="37" Type="N">
+<Text>
+<![CDATA[XIC(INP_CLDRIVE_O1.Motor2_Out_Reg_Enable)OTE(STAUS_DRV_2_ENABLED);]]>
+</Text>
+</Rung>
+<Rung Number="38" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV02.Forward_command) ,XIC(START_ALL) XIO(DRV02.DIR) ]XIC(SOFT_START_TIMER_1.DN)OTE(DRV02.Positive_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="39" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV02.Reverse_command) ,XIC(START_ALL) XIC(DRV02.DIR) ]XIC(SOFT_START_TIMER_1.DN)OTE(DRV02.Negative_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="40" Type="N">
+<Text>
+<![CDATA[XIO(DRV02.Reset)XIC(INP_CLDRIVE_O1.Motor2_Out_Reg_Enable)XIO(INP_CLDRIVE_I1.Motor2_Status_Reg_HLFB_ON)MOVE(2000,TON_ERROR_2.PRE)TON(TON_ERROR_2,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="41" Type="N">
+<Text>
+<![CDATA[XIC(TON_ERROR_2.DN)[OTE(DRV02.STATUS_FAULT) ,OTE(FAULT_DRV_2) ];]]>
+</Text>
+</Rung>
+<Rung Number="42" Type="N">
+<Text>
+<![CDATA[XIC(STAUS_DRV_2_ENABLED)[XIC(DRV02.Positive_Jog_Button_Pressed) ,XIC(DRV02.Negative_Jog_Button_Pressed) ]MOVE(2000,SOFT_START_TIMER_2.PRE)TON(SOFT_START_TIMER_2,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="43" Type="N">
+<Comment>
+<![CDATA[TORQ]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_2.DN) MOVE(DRV02.Move_Acceleration,INP_CLDRIVE_O1.Motor2_A_PWM) ,XIO(SOFT_START_TIMER_2.DN) MOVE(500,INP_CLDRIVE_O1.Motor2_A_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="44" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_2.DN) [LT(DRV02.Move_Velocity_Positive_FPM,360) ,GE(DRV02.Move_Velocity_Positive_FPM,360) MOVE(360,DRV02.Move_Velocity_Positive_FPM) ] CPT(Move_Velocity_Positive_raw_2,DRV02.Move_Velocity_Positive_FPM*((6.438264))+2500) ,XIO(SOFT_START_TIMER_2.DN) CPT(Move_Velocity_Positive_raw_2,100*((6.438264))+2500) ];]]>
+</Text>
+</Rung>
+<Rung Number="45" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_2.DN) CPT(Move_Velocity_Negative_raw_2,DRV02.Move_Velocity_Negative_FPM*(-6.5935+0.197805)+2500.748) ,XIO(SOFT_START_TIMER_2.DN) CPT(Move_Velocity_Negative_raw_2,100*(-6.5935+0.197805)+2500.748) ];]]>
+</Text>
+</Rung>
+<Rung Number="46" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[XIC(DRV02.Positive_Jog_Button_Pressed)XIO(DRV02.Negative_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor2_Status_Reg_HLFB_ON)[LT(Move_Velocity_Positive_raw_2,2500) MOVE(2500,INP_CLDRIVE_O1.Motor2_B_PWM) ,GE(Move_Velocity_Positive_raw_2,2500) LT(Move_Velocity_Positive_raw_2,4990) MOVE(Move_Velocity_Positive_raw_2,INP_CLDRIVE_O1.Motor2_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="47" Type="N">
+<Text>
+<![CDATA[XIC(DRV02.Negative_Jog_Button_Pressed)XIO(DRV02.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor2_Status_Reg_HLFB_ON)[LT(Move_Velocity_Negative_raw_2,15) MOVE(15,INP_CLDRIVE_O1.Motor2_B_PWM) ,GE(Move_Velocity_Negative_raw_2,15) LT(Move_Velocity_Negative_raw_2,2499) MOVE(Move_Velocity_Negative_raw_2,INP_CLDRIVE_O1.Motor2_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="48" Type="N">
+<Text>
+<![CDATA[XIO(DRV02.Negative_Jog_Button_Pressed)XIO(DRV02.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor2_Status_Reg_HLFB_ON)MOVE(2500,INP_CLDRIVE_O1.Motor2_B_PWM);]]>
+</Text>
+</Rung>
+<Rung Number="49" Type="N">
+<Comment>
+<![CDATA[-------------------------------------DRIVE 3-----------------------------------------]]>
+</Comment>
+<Text>
+<![CDATA[NOP();]]>
+</Text>
+</Rung>
+<Rung Number="50" Type="N">
+<Text>
+<![CDATA[[XIC(ENABLE_DRV_3) ,XIC(ENABLE_ALL) ]XIC(SOFT_START_TIMER_2.DN)OTE(INP_CLDRIVE_O1.Motor3_Out_Reg_Enable);]]>
+</Text>
+</Rung>
+<Rung Number="51" Type="N">
+<Text>
+<![CDATA[MOVE(INP_CLDRIVE_I1.Motor3_Status_Reg,DRV03.CURRENT_STATE);]]>
+</Text>
+</Rung>
+<Rung Number="52" Type="N">
+<Text>
+<![CDATA[XIC(INP_CLDRIVE_O1.Motor3_Out_Reg_Enable)OTE(STAUS_DRV_3_ENABLED);]]>
+</Text>
+</Rung>
+<Rung Number="53" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV03.Forward_command) ,XIC(START_ALL) XIO(DRV03.DIR) ]XIC(SOFT_START_TIMER_2.DN)OTE(DRV03.Positive_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="54" Type="N">
+<Text>
+<![CDATA[[XIO(START_ALL) XIC(DRV03.Reverse_command) ,XIC(START_ALL) XIC(DRV03.DIR) ]XIC(SOFT_START_TIMER_2.DN)OTE(DRV03.Negative_Jog_Button_Pressed);]]>
+</Text>
+</Rung>
+<Rung Number="55" Type="N">
+<Text>
+<![CDATA[XIO(DRV03.Reset)XIC(INP_CLDRIVE_O1.Motor3_Out_Reg_Enable)XIO(INP_CLDRIVE_I1.Motor3_Status_Reg_HLFB_ON)MOVE(2000,TON_ERROR_3.PRE)TON(TON_ERROR_3,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="56" Type="N">
+<Text>
+<![CDATA[XIC(TON_ERROR_3.DN)[OTE(DRV03.STATUS_FAULT) ,OTE(FAULT_DRV_3) ];]]>
+</Text>
+</Rung>
+<Rung Number="57" Type="N">
+<Text>
+<![CDATA[XIC(STAUS_DRV_3_ENABLED)[XIC(DRV03.Positive_Jog_Button_Pressed) ,XIC(DRV03.Negative_Jog_Button_Pressed) ]MOVE(2000,SOFT_START_TIMER_3.PRE)TON(SOFT_START_TIMER_3,?,?);]]>
+</Text>
+</Rung>
+<Rung Number="58" Type="N">
+<Comment>
+<![CDATA[TORQ]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_3.DN) MOVE(DRV03.Move_Acceleration,INP_CLDRIVE_O1.Motor3_A_PWM) ,XIO(SOFT_START_TIMER_3.DN) MOVE(500,INP_CLDRIVE_O1.Motor3_A_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="59" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_3.DN) [LT(DRV03.Move_Velocity_Positive_FPM,360) ,GE(DRV03.Move_Velocity_Positive_FPM,360) MOVE(360,DRV03.Move_Velocity_Positive_FPM) ] CPT(Move_Velocity_Positive_raw_3,DRV03.Move_Velocity_Positive_FPM*((6.438264))+2500) ,XIO(SOFT_START_TIMER_3.DN) CPT(Move_Velocity_Positive_raw_3,100*((6.438264))+2500) ];]]>
+</Text>
+</Rung>
+<Rung Number="60" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[[XIC(SOFT_START_TIMER_3.DN) CPT(Move_Velocity_Negative_raw_3,DRV03.Move_Velocity_Negative_FPM*(-6.5935+0.197805)+2500.748) ,XIO(SOFT_START_TIMER_3.DN) CPT(Move_Velocity_Negative_raw_3,100*(-6.5935+0.197805)+2500.748) ];]]>
+</Text>
+</Rung>
+<Rung Number="61" Type="N">
+<Comment>
+<![CDATA[POSITIVE RANGE: 2500 TO 4990 @ 0 RPM TP 1000 RPM
+NEGATIVE: 15 TO 2500 @ 0 RPM TP -1000 RPM]]>
+</Comment>
+<Text>
+<![CDATA[XIC(DRV03.Positive_Jog_Button_Pressed)XIO(DRV03.Negative_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor3_Status_Reg_HLFB_ON)[LT(Move_Velocity_Positive_raw_3,2500) MOVE(2500,INP_CLDRIVE_O1.Motor3_B_PWM) ,GE(Move_Velocity_Positive_raw_3,2500) LT(Move_Velocity_Positive_raw_3,4990) MOVE(Move_Velocity_Positive_raw_3,INP_CLDRIVE_O1.Motor3_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="62" Type="N">
+<Text>
+<![CDATA[XIC(DRV03.Negative_Jog_Button_Pressed)XIO(DRV03.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor3_Status_Reg_HLFB_ON)[LT(Move_Velocity_Negative_raw_3,15) MOVE(15,INP_CLDRIVE_O1.Motor3_B_PWM) ,GE(Move_Velocity_Negative_raw_3,15) LT(Move_Velocity_Negative_raw_3,2499) MOVE(Move_Velocity_Negative_raw_3,INP_CLDRIVE_O1.Motor3_B_PWM) ];]]>
+</Text>
+</Rung>
+<Rung Number="63" Type="N">
+<Text>
+<![CDATA[XIO(DRV03.Negative_Jog_Button_Pressed)XIO(DRV03.Positive_Jog_Button_Pressed)XIC(INP_CLDRIVE_I1.Motor3_Status_Reg_HLFB_ON)MOVE(2500,INP_CLDRIVE_O1.Motor3_B_PWM);]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+<Dependencies>
+<Dependency Type="DataType" Name="UDT_CL_MOTOR"/>
+</Dependencies>
+</AddOnInstructionDefinition>
+</AddOnInstructionDefinitions>
+<Tags Use="Context">
+<Tag Name="CL_01" Class="Standard" TagType="Base" DataType="AOI_CLEARLINK_DRIVE" Constant="false" ExternalAccess="Read/Write" OpcUaAccess="None">
+<Data Format="L5K">
+<![CDATA[[3,0,7,6,1,2,3,4,5,8,[2953575,2000,0],3.14382642e+003,1.86117847e+003,[2957005,2000,0],1.86117847e+003,3.14382642e+003
+		,[2959005,2000,0],3.14382642e+003,1.86117847e+003,[2961005,2000,0],3.14382642e+003,1.86117847e+003
+		,[3210916,2000,0],[3210916,2000,0],[3210916,2000,0],[3210916,2000,0]]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="AOI_CLEARLINK_DRIVE">
+<DataValueMember Name="EnableIn" DataType="BOOL" Value="1"/>
+<DataValueMember Name="EnableOut" DataType="BOOL" Value="1"/>
+<DataValueMember Name="ENABLE_DRV_0" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ENABLE_DRV_1" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ENABLE_DRV_2" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ENABLE_DRV_3" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FAULT_DRV_0" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STAUS_DRV_0_ENABLED" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STAUS_DRV_1_ENABLED" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FAULT_DRV_1" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STAUS_DRV_2_ENABLED" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FAULT_DRV_2" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STAUS_DRV_3_ENABLED" DataType="BOOL" Value="0"/>
+<DataValueMember Name="FAULT_DRV_3" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ENABLE_ALL" DataType="BOOL" Value="0"/>
+<DataValueMember Name="START_ALL" DataType="BOOL" Value="0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="DRV00_1" Class="Standard" TagType="Base" DataType="UDT_CL_MOTOR" Constant="false" ExternalAccess="Read/Write" OpcUaAccess="None">
+<Data Format="L5K">
+<![CDATA[[0,0,500,360,150,0,32,17412,1,1.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="UDT_CL_MOTOR">
+<DataValueMember Name="CURRENT_STATE" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Negative_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Positive_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Move_Acceleration" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="Move_Velocity_Positive_FPM" DataType="DINT" Radix="Decimal" Value="360"/>
+<DataValueMember Name="Move_Velocity_Negative_FPM" DataType="DINT" Radix="Decimal" Value="150"/>
+<DataValueMember Name="Reset" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Begin_Homing" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ACCUMULATED_SHUTDOWN_HISTORY" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0000_0000_0010_0000"/>
+<DataValueMember Name="CURRENT_MOTOR_STATUS" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0100_0100_0000_0100"/>
+<DataValueMember Name="Motor_Stopped" DataType="BOOL" Value="1"/>
+<DataValueMember Name="Motor_Moving_At_Target_Velocity" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Forward_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Reverse_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STATUS_FAULT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DIR" DataType="BOOL" Value="0"/>
+<DataValueMember Name="SCALE_FPM_RPM" DataType="REAL" Radix="Float" Value="1.0"/>
+<DataValueMember Name="Target_Vel_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_FPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Torq_feedback" DataType="REAL" Radix="Float" Value="0.0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="DRV01_1" Class="Standard" TagType="Base" DataType="UDT_CL_MOTOR" Constant="false" ExternalAccess="Read/Write" OpcUaAccess="None">
+<Data Format="L5K">
+<![CDATA[[0,0,500,360,150,0,0,17420,1,1.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="UDT_CL_MOTOR">
+<DataValueMember Name="CURRENT_STATE" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Negative_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Positive_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Move_Acceleration" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="Move_Velocity_Positive_FPM" DataType="DINT" Radix="Decimal" Value="360"/>
+<DataValueMember Name="Move_Velocity_Negative_FPM" DataType="DINT" Radix="Decimal" Value="150"/>
+<DataValueMember Name="Reset" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Begin_Homing" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ACCUMULATED_SHUTDOWN_HISTORY" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0000_0000_0000_0000"/>
+<DataValueMember Name="CURRENT_MOTOR_STATUS" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0100_0100_0000_1100"/>
+<DataValueMember Name="Motor_Stopped" DataType="BOOL" Value="1"/>
+<DataValueMember Name="Motor_Moving_At_Target_Velocity" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Forward_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Reverse_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STATUS_FAULT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DIR" DataType="BOOL" Value="0"/>
+<DataValueMember Name="SCALE_FPM_RPM" DataType="REAL" Radix="Float" Value="1.0"/>
+<DataValueMember Name="Target_Vel_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_FPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Torq_feedback" DataType="REAL" Radix="Float" Value="0.0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="DRV02_1" Class="Standard" TagType="Base" DataType="UDT_CL_MOTOR" Constant="false" ExternalAccess="Read/Write" OpcUaAccess="None">
+<Data Format="L5K">
+<![CDATA[[0,0,500,350,150,0,32,17420,1,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="UDT_CL_MOTOR">
+<DataValueMember Name="CURRENT_STATE" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Negative_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Positive_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Move_Acceleration" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="Move_Velocity_Positive_FPM" DataType="DINT" Radix="Decimal" Value="350"/>
+<DataValueMember Name="Move_Velocity_Negative_FPM" DataType="DINT" Radix="Decimal" Value="150"/>
+<DataValueMember Name="Reset" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Begin_Homing" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ACCUMULATED_SHUTDOWN_HISTORY" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0000_0000_0010_0000"/>
+<DataValueMember Name="CURRENT_MOTOR_STATUS" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0100_0100_0000_1100"/>
+<DataValueMember Name="Motor_Stopped" DataType="BOOL" Value="1"/>
+<DataValueMember Name="Motor_Moving_At_Target_Velocity" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Forward_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Reverse_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STATUS_FAULT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DIR" DataType="BOOL" Value="0"/>
+<DataValueMember Name="SCALE_FPM_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_FPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Torq_feedback" DataType="REAL" Radix="Float" Value="0.0"/>
+</Structure>
+</Data>
+</Tag>
+<Tag Name="DRV03_1" Class="Standard" TagType="Base" DataType="UDT_CL_MOTOR" Constant="false" ExternalAccess="Read/Write" OpcUaAccess="None">
+<Data Format="L5K">
+<![CDATA[[0,0,500,350,150,0,0,17420,1,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000]]]>
+</Data>
+<Data Format="Decorated">
+<Structure DataType="UDT_CL_MOTOR">
+<DataValueMember Name="CURRENT_STATE" DataType="DINT" Radix="Decimal" Value="0"/>
+<DataValueMember Name="Negative_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Positive_Jog_Button_Pressed" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Move_Acceleration" DataType="DINT" Radix="Decimal" Value="500"/>
+<DataValueMember Name="Move_Velocity_Positive_FPM" DataType="DINT" Radix="Decimal" Value="350"/>
+<DataValueMember Name="Move_Velocity_Negative_FPM" DataType="DINT" Radix="Decimal" Value="150"/>
+<DataValueMember Name="Reset" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Begin_Homing" DataType="BOOL" Value="0"/>
+<DataValueMember Name="ACCUMULATED_SHUTDOWN_HISTORY" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0000_0000_0000_0000"/>
+<DataValueMember Name="CURRENT_MOTOR_STATUS" DataType="DINT" Radix="Binary" Value="2#0000_0000_0000_0000_0100_0100_0000_1100"/>
+<DataValueMember Name="Motor_Stopped" DataType="BOOL" Value="1"/>
+<DataValueMember Name="Motor_Moving_At_Target_Velocity" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Forward_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="Reverse_command" DataType="BOOL" Value="0"/>
+<DataValueMember Name="STATUS_FAULT" DataType="BOOL" Value="0"/>
+<DataValueMember Name="DIR" DataType="BOOL" Value="0"/>
+<DataValueMember Name="SCALE_FPM_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_RPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Target_Vel_FPM" DataType="REAL" Radix="Float" Value="0.0"/>
+<DataValueMember Name="Torq_feedback" DataType="REAL" Radix="Float" Value="0.0"/>
+</Structure>
+</Data>
+</Tag>
+</Tags>
+<Programs Use="Context">
+<Program Use="Context" Name="MainProgram" Class="Standard">
+<Routines Use="Context">
+<Routine Use="Target" Name="SINGLE_AOI_CLEARLINK" Type="RLL">
+<RLLContent>
+<Rung Number="0" Type="N">
+<Text>
+<![CDATA[;]]>
+</Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text>
+<![CDATA[[AOI_CLEARLINK_DRIVE(CL_01,ClearLink1:O1,ClearLink1:I1,DRV00_1,DRV01_1,DRV02_1,DRV03_1) ,CPT(DRV00_1.Move_Velocity_Positive_FPM,DRV00_1.Move_Velocity_Positive_FPM) ,CPT(DRV01_1.Move_Velocity_Positive_FPM,DRV01_1.Move_Velocity_Positive_FPM) ,CPT(DRV02_1.Move_Velocity_Positive_FPM,DRV02_1.Move_Velocity_Positive_FPM) ,CPT(DRV03_1.Move_Velocity_Positive_FPM,DRV03_1.Move_Velocity_Positive_FPM) ,MOVE(DRV00_1.Move_Acceleration,DRV00_1.Move_Acceleration) ,MOVE(DRV01_1.Move_Acceleration,DRV01_1.Move_Acceleration) ,MOVE(DRV02_1.Move_Acceleration,DRV02_1.Move_Acceleration) ,MOVE(DRV03_1.Move_Acceleration,DRV03_1.Move_Acceleration) ];]]>
+</Text>
+</Rung>
+</RLLContent>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>
